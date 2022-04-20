@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nats
+data:
+  nats-server.conf: |-
+    listen: 0.0.0.0:4222
+    http: 0.0.0.0:8222
+
+    # Authorization for client connections
+    authorization {
+      user: "nats_client"
+      password: "YWpXDpBqzd"
+      timeout:  1
+    }
+
+    # Logging options
+    debug: false
+    trace: false
+    logtime: false
+    # Pid file
+    pid_file: "/opt/bitnami/nats/tmp/nats-server.pid"
+
+    # Some system overrides
+
+    # Clustering definition
+    cluster {
+      listen: 0.0.0.0:6222
+      # Authorization for cluster connections
+      authorization {
+        user: "nats_cluster"
+        password: "PwrtpIwkD8"
+        timeout:  1
+      }
+      # Routes are actively solicited and connected to from this server.
+      # Other servers can connect to us if they supply the correct credentials
+      # in their routes definitions from above
+      routes = [
+        nats://nats_cluster:PwrtpIwkD8@nats-1648639804:6222
+      ]
+    }

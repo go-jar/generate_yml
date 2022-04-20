@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: @name
+  namespace: infra
+spec:
+  selector:
+    matchLabels:
+      app: @name
+  replicas: @count
+  template:
+    metadata:
+      labels:
+        app: @name
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 70
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - @name
+                topologyKey: kubernetes.io/hostname
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: region
+                    operator: In
+                    values:
+                    - @node_affinity
+      containers:
+        - name: discovery
+          image: code.ds:6543/discovery-server:@label
+          ports:
+            - name: server
+              containerPort: @port
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: RUN_XREMOTE_SERVER_MODE
+              value: production
+          volumeMounts:
+            - name: config
+              mountPath: /opt/discovery_server/config/discovery/production.toml
+              subPath: production.toml
+          command: ["/bin/bash"]
+          args: ["-c", "/opt/discovery_server/run.sh"]
+      volumes:
+        - name: config
+          configMap:
+            name: @name

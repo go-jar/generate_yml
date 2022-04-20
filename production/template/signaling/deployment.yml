@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: @name
+  namespace: infra
+spec:
+  selector:
+    matchLabels:
+      app: @name
+  replicas: @count
+  template:
+    metadata:
+      labels:
+        app: @name
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 70
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - @name
+                topologyKey: kubernetes.io/hostname
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: region
+                    operator: In
+                    values:
+                    - @node_affinity
+      containers:
+        - name: signaling
+          image: code.ds:6543/signaling-server:@label
+          ports:
+            - name: server
+              containerPort: @port
+              protocol: UDP
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: RUN_XREMOTE_SERVER_MODE
+              value: production
+          command: ["/bin/bash"]
+          args: ["-c", "/opt/signaling_server/run.sh"]
+          volumeMounts:
+            - name: config
+              mountPath: /opt/signaling_server/config/signaling/production.toml
+              subPath: production.toml
+          securityContext:
+            privileged: true
+      volumes:
+        - name: config
+          configMap:
+            name: @name

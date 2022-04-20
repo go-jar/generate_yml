@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: @name
+  namespace: infra
+spec:
+  selector:
+    matchLabels:
+      app: @name
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: @name
+    spec:
+      nodeSelector:
+        xremote: @node_label
+      containers:
+        - name: relay
+          image: code.ds:6543/relay-server:@label
+          ports:
+            - name: server
+              containerPort: @relay_intranet_port
+              protocol: UDP
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: RUN_XREMOTE_SERVER_MODE
+              value: production
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          volumeMounts:
+            - name: config
+              mountPath: /opt/relay_server/config/relay/production.toml
+              subPath: production.toml
+          command: ["/bin/bash"]
+          args: ["-c", "/opt/relay_server/run.sh"]
+      volumes:
+        - name: config
+          configMap:
+            name: @name

@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: @name
+  namespace: infra
+spec:
+  ports:
+    - name: server
+      port: @port
+      targetPort: @port
+      protocol: UDP
+  selector:
+    app: @name
+  sessionAffinity: ClientIP

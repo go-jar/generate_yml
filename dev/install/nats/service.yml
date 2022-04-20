@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats-headless
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: nats
+    app.kubernetes.io/name: nats
+    helm.sh/chart: nats-7.1.13
+spec:
+  ports:
+    - name: tcp-client
+      protocol: TCP
+      port: 4222
+      targetPort: client
+    - name: tcp-cluster
+      protocol: TCP
+      port: 6222
+      targetPort: cluster
+    - name: tcp-monitoring
+      protocol: TCP
+      port: 8222
+      targetPort: monitoring
+  selector:
+    app.kubernetes.io/instance: nats
+    app.kubernetes.io/name: nats
+  clusterIP: None
+  type: ClusterIP
+  ipFamilies:
+    - IPv4
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: nats
+    app.kubernetes.io/name: nats
+    helm.sh/chart: nats-7.1.13
+spec:
+  ports:
+    - name: tcp-client
+      protocol: TCP
+      port: 4222
+      targetPort: client
+    - name: tcp-cluster
+      protocol: TCP
+      port: 6222
+      targetPort: cluster
+    - name: tcp-monitoring
+      protocol: TCP
+      port: 8222
+      targetPort: monitoring
+  selector:
+    app.kubernetes.io/instance: nats
+    app.kubernetes.io/name: nats
+  type: ClusterIP
+  ipFamilies:
+    - IPv4

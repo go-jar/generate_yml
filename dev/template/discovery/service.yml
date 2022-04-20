@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: @name
+spec:
+  ports:
+    - name: server
+      nodePort: @port
+      port: @port
+      targetPort: @port
+      protocol: TCP
+  selector:
+    app: @name
+  type: NodePort
+  externalTrafficPolicy: Local

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: @name
+data:
+  production.toml: |-
+    debug = false
+
+    [server]
+    listen_port = @port
+
+    [config_item]
+    city_list = ["beijing", "shenzhen", "guangzhou"]
+
+    [nats]
+    nats_addr = "@nats_addr"
+    nats_port = @nats_port
+    tls = false
+    user = "@nats_user"
+    password = "@nats_password"

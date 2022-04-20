@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: @name
+spec:
+  selector:
+    matchLabels:
+      app: @name
+  replicas: @count
+  template:
+    metadata:
+      labels:
+        app: @name
+    spec:
+      containers:
+        - name: discovery
+          image: code.ds:6543/discovery-server:@label
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: server
+              containerPort: @port
+              protocol: TCP
+          env:
+            - name: RUN_XREMOTE_SERVER_MODE
+              value: production
+          volumeMounts:
+            - name: config
+              mountPath: /opt/discovery_server/config/discovery/production.toml
+              subPath: production.toml
+          command: ["/bin/bash"]
+          args: ["-c", "/opt/discovery_server/run.sh"]
+      volumes:
+        - name: config
+          configMap:
+            name: @name

@@ -1,0 +1,47 @@
+{
+  "nats": {
+    "nats_addr": "nats-headless.default",
+    "nats_port": 4222,
+    "nats_user": "nats_client",
+    "nats_password": "YWpXDpBqzd"
+  },
+  "redis": {
+    "redis_addr": ["redis-headless.default"],
+    "redis_port": 6379,
+    "redis_password": "tII8MnLMgL",
+    "cluster": false
+  },
+  "xremote": [
+    {
+      "data_center": "shenzhen",
+      "discovery": {
+        "image_label": "latest",
+        "discovery_count": 2,
+        "discovery_port": 50011
+      },
+      "signaling": {
+        "image_label": "latest",
+        "signaling_count": 2,
+        "signaling_port": 21116,
+        "signaling_pub_addr": "10.10.10.10"
+      },
+      "relay": {
+        "image_label": "latest",
+        "network": [
+          {
+            "relay_public_addr": "10.10.10.10",
+            "relay_intranet_addr": "10.10.10.10",
+            "relay_public_port": 21117,
+            "relay_intranet_port": 21117
+          },
+          {
+            "relay_public_addr": "10.10.10.10",
+            "relay_intranet_addr": "10.10.10.10",
+            "relay_public_port": 21119,
+            "relay_intranet_port": 21119
+          }
+        ]
+      }
+    }
+  ]
+}

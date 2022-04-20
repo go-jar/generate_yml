@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: @name
+spec:
+  selector:
+    matchLabels:
+      app: @name
+  replicas: @count
+  template:
+    metadata:
+      labels:
+        app: @name
+    spec:
+      containers:
+        - name: @name
+          image: code.ds:6543/signaling-server:@label
+          ports:
+            - name: server
+              containerPort: @port
+              protocol: UDP
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: RUN_XREMOTE_SERVER_MODE
+              value: production
+          command: ["/bin/bash"]
+          args: ["-c", "/opt/signaling_server/run.sh"]
+          volumeMounts:
+            - name: config
+              mountPath: /opt/signaling_server/config/signaling/production.toml
+              subPath: production.toml
+      volumes:
+        - name: config
+          configMap:
+            name: @name

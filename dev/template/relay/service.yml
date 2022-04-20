@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: @name
+spec:
+  ports:
+    - name: server
+      nodePort: @relay_intranet_port
+      port: @relay_intranet_port
+      targetPort: @relay_intranet_port
+      protocol: UDP
+  selector:
+    app: @name
+  type: NodePort
+  externalTrafficPolicy: Local
+  sessionAffinity: ClientIP

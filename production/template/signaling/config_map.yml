@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: @name
+  namespace: infra
+data:
+  production.toml: |-
+    debug = false
+
+    [nats]
+    nats_addr = "@nats_addr"
+    nats_port = @nats_port
+    tls = false
+    user = "@nats_user"
+    password = "@nats_password"
+
+    [redis]
+    redis_addr = [@redis_addr]
+    redis_port = @redis_port
+    tls = false
+    cluster = @cluster
+    password = "@redis_password"
+
+    [signaling]
+    data_center = "@data_center"
+    service_name = "signaling"
+    signaling_port = @port
+    signaling_pub_addr = "@pub_addr"

@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: @name
+  namespace: infra
+data:
+  production.toml: |-
+    debug = false
+
+    [nats]
+    nats_addr = "@nats_addr"
+    nats_port = @nats_port
+    tls = false
+    user = "@nats_user"
+    password = "@nats_password"
+
+    [relay]
+    service_name = "relay"
+    data_center = "@data_center"
+    relay_server_port = @relay_intranet_port
+    relay_public_addr = "@relay_public_addr"
+    relay_public_port = @relay_public_port
+    relay_intranet_addr = "@relay_intranet_addr"
+    relay_intranet_port = @relay_intranet_port

@@ -1,0 +1,53 @@
+{
+  "nats": {
+    "nats_addr": "nats-headless.infra",
+    "nats_port": 4222,
+    "nats_user": "nats_client",
+    "nats_password": "123"
+  },
+  "redis": {
+    "redis_addr": ["10.10.10.10"],
+    "redis_port": 8379,
+    "redis_password": "123",
+    "cluster": true
+  },
+  "xremote": [
+    {
+      "data_center": "shenzhen",
+      "discovery": {
+        "image_label": "test",
+        "node_affinity": "sz",
+        "discovery_count": 2,
+        "discovery_port": 50011
+      },
+      "signaling": {
+        "image_label": "test",
+        "node_affinity": "sz",
+        "signaling_count": 1,
+        "signaling_port": 51116,
+        "signaling_pub_addr": "10.10.10.10"
+      },
+      "relay": {
+        "image_label": "test",
+        "network": [
+          {
+            "node_label": "relay-0",
+            "node_name": "sz-exa-cpu-35",
+            "relay_public_addr": "10.10.10.10",
+            "relay_intranet_addr": "10.10.10.10",
+            "relay_public_port": 51017,
+            "relay_intranet_port": 51017
+          },
+          {
+            "node_label": "relay-1",
+            "node_name": "sz-exa-cpu-36",
+            "relay_public_addr": "10.10.10.10",
+            "relay_intranet_addr": "10.10.10.10",
+            "relay_public_port": 51118,
+            "relay_intranet_port": 51017
+          }
+        ]
+      }
+    }
+  ]
+}
