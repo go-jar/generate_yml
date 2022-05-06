@@ -6,8 +6,8 @@ metadata:
 spec:
   ports:
     - name: server
-      port: @relay_intranet_port
-      targetPort: @relay_intranet_port
+      port: 51117
+      targetPort: 51117
       protocol: UDP
   selector:
     app: @name

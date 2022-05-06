@@ -17,7 +17,7 @@ data:
     [relay]
     service_name = "relay"
     data_center = "@data_center"
-    relay_server_port = @relay_intranet_port
+    relay_server_port = 51117
     relay_public_addr = "@relay_public_addr"
     relay_public_port = @relay_public_port
     relay_intranet_addr = "@relay_intranet_addr"

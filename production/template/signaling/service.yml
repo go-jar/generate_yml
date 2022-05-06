@@ -6,8 +6,8 @@ metadata:
 spec:
   ports:
     - name: server
-      port: @port
-      targetPort: @port
+      port: 51116
+      targetPort: 51116
       protocol: UDP
   selector:
     app: @name

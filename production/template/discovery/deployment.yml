@@ -35,22 +35,31 @@ spec:
                     - @node_affinity
       containers:
         - name: discovery
-          image: code.ds:6543/discovery-server:@label
+          image: hub.autox.ai/infra/xremote/discovery-server:@label
           ports:
             - name: server
-              containerPort: @port
+              containerPort: 50011
               protocol: TCP
           imagePullPolicy: IfNotPresent
           env:
             - name: RUN_XREMOTE_SERVER_MODE
               value: production
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
           volumeMounts:
             - name: config
               mountPath: /opt/discovery_server/config/discovery/production.toml
               subPath: production.toml
-          command: ["/bin/bash"]
-          args: ["-c", "/opt/discovery_server/run.sh"]
+            - name: log
+              mountPath: /opt/discovery_server/log
+          command: ["sh", "-c", "/opt/discovery_server/run.sh"]
       volumes:
         - name: config
           configMap:
             name: @name
+        - name: log
+          persistentVolumeClaim:
+            claimName: xremote-log

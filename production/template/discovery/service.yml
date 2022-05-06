@@ -6,8 +6,8 @@ metadata:
 spec:
   ports:
     - name: server
-      port: @port
-      targetPort: @port
+      port: 50011
+      targetPort: 50011
       protocol: TCP
   selector:
     app: @name

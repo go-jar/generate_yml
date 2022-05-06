@@ -8,7 +8,7 @@ data:
     debug = false
 
     [server]
-    listen_port = @port
+    listen_port = 50011
 
     [config_item]
     city_list = ["beijing", "shenzhen", "guangzhou"]

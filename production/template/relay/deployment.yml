@@ -17,10 +17,10 @@ spec:
         xremote: @node_label
       containers:
         - name: relay
-          image: code.ds:6543/relay-server:@label
+          image: hub.autox.ai/infra/xremote/relay-server:@label
           ports:
             - name: server
-              containerPort: @relay_intranet_port
+              containerPort: 51117
               protocol: UDP
           imagePullPolicy: IfNotPresent
           env:
@@ -30,13 +30,23 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.hostIP
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
           volumeMounts:
             - name: config
               mountPath: /opt/relay_server/config/relay/production.toml
               subPath: production.toml
+            - name: log
+              mountPath: /opt/relay_server/log
           command: ["/bin/bash"]
           args: ["-c", "/opt/relay_server/run.sh"]
       volumes:
         - name: config
           configMap:
             name: @name
+        - name: log
+          persistentVolumeClaim:
+            claimName: xremote-log
